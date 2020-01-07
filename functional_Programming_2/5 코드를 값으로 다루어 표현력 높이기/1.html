@@ -1,0 +1,81 @@
+<script src='../fx.js'></script>
+<script>
+  const products = [{
+      name: '반팔티',
+      price: 15000
+    },
+    {
+      name: '긴팔티',
+      price: 20000
+    },
+    {
+      name: '핸드폰케이스',
+      price: 15000
+    },
+    {
+      name: '후드티',
+      price: 30000
+    },
+    {
+      name: '바지',
+      price: 25000
+    }
+  ];
+</script>
+# 코드를 값으로 다루어 표현력 높이기
+
+## go pipe
+<script>
+  const add = (a, b) => a + b
+  //인자들을 받아 하나의 값으로 축약하면 된다.
+  // go함수의 인자를 다음 다음 다음 함수로 전달하게된다
+  const go = (...args) => reduce((item, func) => func(item), args)
+
+  //내부에서 go를 사용함
+  const pipe = (f, ...fs) => (...items) => go(f(...items), ...fs)
+
+
+  go(
+    add(0, 1),
+    a => a + 10,
+    a => a + 100,
+    log //111
+  )
+
+  const ffpipe = pipe(
+    (a, b) => a + b,
+    a => a + 10,
+    a => a + 100
+  )
+
+  log(
+    ffpipe(0, 1)
+  )
+</script>
+
+# go code를 바꺼보댜
+
+<script>
+  go(
+    products,
+    products => filter(p => p.price < 20000, products),
+    products => map(p => p.price, products),
+    prices => reduce(add, prices),
+    log,
+  )
+</script>
+
+
+# curry
+
+받아둔 함수를 원하는 시점에 평가시킴
+
+함수를 받아 함수를 리턴하고 인자를 받아 인자가 원하는 갯수만큼들어왔을 때 평가함
+
+<script>
+  const curry = f => (a, ..._) => _.length ? f(a, ..._) : (..._) => f(a, ..._)
+
+  const mult = curry((a, b) => a * b)
+
+  console.log(mult);
+</script>

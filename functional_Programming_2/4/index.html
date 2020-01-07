@@ -1,0 +1,171 @@
+<script>
+  const log = console.log
+</script>
+
+<script>
+  const products = [{
+      name: '반팔티',
+      price: 15000
+    },
+    {
+      name: '긴팔티',
+      price: 20000
+    },
+    {
+      name: '핸드폰케이스',
+      price: 15000
+    },
+    {
+      name: '후드티',
+      price: 30000
+    },
+    {
+      name: '바지',
+      price: 25000
+    }
+  ];
+</script>
+
+## map
+
+<script>
+  const map = (func, iter) => { //받는 값이 iterable protocol을 받는다
+    //함수를 받아 어떤값을 수집할 것인지를 f에게 위임한다
+    let result = []
+    for (const item of iter) {
+      result.push(func(item))
+    }
+    return result
+  }
+
+  log(`map`, map(p => p.name, products))
+  log(`map`, map(p => p.price, products))
+
+  // let names = []
+  // for (const p of products) {
+  //   names.push(p.name)
+  // }
+  // log(names)
+  // let prices = []
+  // for (const p of products) {
+  //   prices.push(p.price)
+  // }
+  // log(prices)
+</script>
+
+## iterable protocol을 따른 map의 다형성
+
+<script>
+  log(document.querySelectorAll('*')) //__proto__ : NodeList
+  //log(document.querySelectorAll('*')map(el=>el.names))
+  log(map(el => el.nodeName, document.querySelectorAll('*')))
+
+  const it = document.querySelectorAll('*')[Symbol.iterator]()
+  //document는 brawser의 값
+  log(it)
+  log(it.next())
+  log(it.next())
+
+  function* gen() {
+    yield 2;
+    yield 3;
+    yield 4;
+    if (false) yield 5;
+  }
+
+  log(map(a => a * a, gen())) //iterable하기만하면 map함수를 사용할 수 있다.
+  //거의 모든 것들을 map할 수 있다.
+  let m = new Map();
+  m.set('a', 12);
+  m.set('b', 20)
+
+  const itm = m[Symbol.iterator]()
+  log(itm.next())
+  log(itm.next())
+
+  log(new Map(map(([k, a]) => [k, a * 2], m)))
+</script>
+
+## filter
+
+<script>
+  console.clear()
+  // let under20000 = []
+  // for (const p of products) {
+  //   if (p.price < 20000) under20000.push(p)
+  // }
+  // log(...under20000)
+
+  // let over20000 = []
+  // for (const p of products) {
+  //   if (p.price > 20000) over20000.push(p)
+  // }
+  // log(...over20000)
+  const filter = (func, iter) => {
+    let result = []
+    for (const item of iter) {
+      if (func(item)) result.push(item)
+    }
+    return result
+  }
+  log(`filter`, ...filter(p => p.price < 20000, products))
+  log(`filter`, ...filter(p => p.price >= 20000, products))
+
+  log(filter(n => n % 2, function* () {
+    yield 1;
+    yield 2;
+    yield 3;
+    yield 4;
+    yield 5;
+    yield 6;
+  }()))
+</script>
+
+## reduce
+
+<script>
+  const nums = [1, 2, 3, 4, 5]
+  //위 값들을 하나로 더해보자
+
+  let total = 0;
+
+  for (const n of nums) {
+    total = total + n
+  }
+  console.log(`total`, total);
+
+  const reduce = (func, acc, iter) => {
+    if (!iter) {
+      iter = acc[Symbol.iterator]()
+      acc = iter.next().value
+    }
+    for (const a of iter) {
+      acc = func(acc, a);
+    }
+    return acc
+  }
+
+  const add = (a, b) => a + b
+  log(add(add(add(add(add(0, 1), 2), 3), 4), 5)) //reduce의 내부가 이렇게 생겨무따
+  //
+  log(reduce(add, 0, [1, 2, 3, 4, 5]))
+  log(reduce(add, [1, 2, 3, 4, 5])) //이렇게 받았을 경우
+  log(reduce(add, 1, [2, 3, 4, 5])) //이렇게 동작하도록
+  //15
+
+  log(reduce((total_price, product) => total_price + product.price,
+    0,
+    products))
+</script>
+
+
+
+<script>
+
+</script>
+<script></script>
+<script></script>
+<script></script>
+<script></script>
+<script></script>
+<script></script>

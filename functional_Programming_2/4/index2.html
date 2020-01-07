@@ -1,0 +1,54 @@
+<script src='../fx.js'></script>
+
+<script>
+  const products = [{
+      name: '반팔티',
+      price: 15000
+    },
+    {
+      name: '긴팔티',
+      price: 20000
+    },
+    {
+      name: '핸드폰케이스',
+      price: 15000
+    },
+    {
+      name: '후드티',
+      price: 30000
+    },
+    {
+      name: '바지',
+      price: 25000
+    }
+  ];
+
+  log(map(p => p.price, products))
+
+  const add = (a, b) => a + b
+  log(
+    reduce(
+      add, //이걸로 축약
+      map(p => p.price, //맵으로 뽑고
+        filter(p => p.price < 20000, products)))) //products를 price가 20000미만을
+  //오른쪽에서 왼쪽으로 읽으면 된다.
+
+  log(
+    reduce(
+      add, //이걸로 축약
+      filter(p => p.price < 20000, //필터로 걸러
+        map(p => p.price, products))))
+
+  /*
+    함수형 프로그래밍
+    reduce를 할껀데 add를 하고싶으면 
+    log(
+      reduce(
+        add,
+        [10,20,30,40]
+      )
+    )
+    숫자가 되어있는 배열로 평가되도록 생각해보자
+    
+  */
+</script>

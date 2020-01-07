@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <title>Page Title</title>
+
+  <script>
+    function delay(time) {
+      return new Promise(resolve => setTimeout(() => resolve(), time))
+    }
+
+    async function delayIdentity(a) {
+      await delay(500);
+      return a
+    }
+
+    // (async function asdf(c) {
+    //   const a = await delayIdentity(70)
+    //   const b = await delayIdentity(60)
+    //   console.log(`asdfasdf`);
+    //   console.log(a + b, c) //130
+    //   console.log(`asdfasdf`);
+
+    // })('sdfg')
+
+    (async (c) => {
+      const a = await delayIdentity(70)
+      const b = 1
+      console.log(a + b, c) //130
+    })('sdfg');
+
+    console.log(typeof (function qwer(a) {
+      console.log(a)
+    }));
+
+
+    (function qwer(a) {
+      console.log(a)
+    })('asdf');
+    // function qwer(a) {
+    //   console.log(a)
+    // }
+
+    // qwer(0)
+
+    // qwer()
+    // console.log('44' + 11);
+
+
+    // (function qwerrr() {
+    //   const a = `44`
+    //   const b = 12
+    //   console.log(1)
+    //   console.log(a + b)
+    // })()
+
+    // console.log(qwer);
+
+
+
+    // const delay100 = async (a) => new Promise(res => setTimeout(() => res(a), 10))
+
+
+    // const t1 = delay100()
+
+    // console.log(t1)
+  </script>
+  <script>
+
+  </script>
+
+</head>
+
+<body>
+
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Page Title</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  # Promise
+  ## 일급
+  <script>
+    function add10(a, callback) {
+      setTimeout(() => callback(a + 10), 100)
+    }
+    add10(5, res => {
+      console.log(res)
+    })
+    var a = add10(5, res => {
+      add10(res, res => { //비동기적인 상황을 다루는것이 code로 만 표현되어잇따
+        add10(res, res => {
+          console.log(res)
+        })
+      })
+    })
+    //add10(5,_=>_) 리턴값은 중요하지 않고 셋타임아웃이 일어난다는 코드적 상황과 끝났을때 어떤상황을 실행해주는 컨텍스트만 남아있는 상황이다.
+
+    //console.log(a)
+
+
+    function add20(a) { //비동기상황에 대한 값을 만들어서 return을 하고있다.
+      return new Promise(res => setTimeout(() => res(a + 20), 100))
+    }
+    //promise를 만들어서 `return`함  :add10(5,_=>_)
+
+    var b = add20(5)
+      .then(add20)
+      .then(add20) //20이 3번 더해짐
+      .then(console.log)
+    //코드를 평가했을 때 즉시 promise가 리턴 : 그이후에 원하는 일들을 다룰수 있다.
+    /*
+    c
+    Promise {<resolved>: 25}
+    c.then(a=>a-5)
+    Promise {<resolved>: 20}
+      이렇게 어떠한 일들을 연결지어서 일어날수있다.
+      값으로 다룰수 있다 -> 일급이다.
+      전달된 값으로 어떠한 일들을 이어나갈수있다.
+    */
+    console.log(b)
+    /*
+    Promise -> 대기와 성공과 실패를 다루는 일급값으로 되어있다.
+    callback과 가장 큰 차이 : 대기와 일을 끝내는 것들을 어떤 코드나 컨텍스트로만 다루는것이 아니라 `대기되어지는 값`(*****)을 만든다.
+
+    */
+  </script>
+
+  ## 일급활용
+
+  : Promise가 값으로 다룰 수 있는 일급이라는 성질을 활용해서
+  <script>
+    console.clear()
+
+    //const go1 = (a, f) => f(a) //이거를 밑으로 바꾸자
+    const go1 = (a, f) => a instanceof Promise ? a.then(f) : f(a)
+    const add5 = a => a + 5
+    console.dir(`go1 -> 10`, go1(10, add5))
+    console.log(go1(Promise.resolve(10), add5))
+    //이것도 제대로 동작하게 하려면
+
+    const delay100 = a => new Promise(res => setTimeout(() => res(a), 10))
+    console.log(go1(delay100(10), add5))
+
+
+    var r1 = go1(10, add5)
+    console.log(r1)
+    var r2 = go1(delay100(10), add5)
+
+    r2.then(console.log)
+
+    go1(go1(delay100(10), add5), console.log)
+    console.log(`-0-0-0-0-0-0-`);
+  </script>
+
+  # Composition
+  <script>
+
+  </script>
+
+  # Klesli Composition
+  <script>
+
+  </script>
+</head>
+
+<body>
+</body>
+
+</html>
